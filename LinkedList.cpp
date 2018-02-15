@@ -81,10 +81,63 @@ void del_any(int pos){
     f->next=n->next;
     free(n);
 }
+
+void del_data(int data){
+  Node* n = head;
+  if(head->data==data){head=n->next; free(n); return;}
+  Node* f=n;
+  while(n!=NULL && n->data!=data){
+    f=n;
+    n=n->next;
+  }
+  f->next=n->next;
+  free(n);
+}
+
+void count_del(int data){
+  int ctr=0;
+  int i=0;
+  Node* n= head;
+  while (n!=NULL) {
+    n=n->next;
+    i++;
+  }
+  int ctr_pos[i];
+  n=head;
+  i=0;
+  int pos;
+  while(n!=NULL){
+    if(n->data==data){
+      ctr_pos[ctr++]=i;
+    }
+    i++;
+    n=n->next;
+  }
+  if(ctr>1){
+    cout<<"\nmultiple instances found!!!\n"<<"positions ->";
+    for(i=0;i<ctr;i++){
+    cout<<ctr_pos[i]+1<<" ";
+    }
+    cout<<" \nEnter position to delete or Press 0 to delete all :";
+    cin>>pos;
+    if(pos!=0) del_any(pos);
+    else{
+      for(i=0;i<ctr;i++){
+        del_data(data);
+      }
+    }
+  }
+  else{
+    del_any(ctr_pos[0]+1);
+  }
+}
+
+
 int main() {
   int data;
   int option;
   int pos;
+  int *ctr_pos;
   do {
   cout<<"\nSelect option\n";
   cout<<"1. Insert\n";
@@ -106,12 +159,13 @@ int main() {
       cout<<"1. Delete in the Beggining.\n";
       cout<<"2. Delete in the End.\n";
       cout<<"3. Delete at any Position.\n";
+      cout<<"4. Delete a particular number\n";
       cin>>option;
       option+=3;
       }
-   else if(option==3) option=7;
-    else if(option==4) option=8;
-    else option=9;
+   else if(option==3) option=8;
+    else if(option==4) option=99;
+    else option=999;
   switch (option) {
     case 1: insert_beg(data); break;
     case 2: cout<<"Enter position : "; cin>>pos; insert_any(data,pos); break;
@@ -119,10 +173,11 @@ int main() {
     case 4: del_beg(); break;
     case 5: del_end(); break;
     case 6: cout<<"Enter position : "; cin>>pos; del_any(pos); break;
-    case 7: display(); break;
-    case 8: break;
+    case 7: cout<<"Enter the data : "; cin>>data; count_del(data); break;
+    case 8: display(); break;
+    case 99: break;
     default: cout<<"Wrong input. Enter again!!\n";
   }
-}while(option!=8);
+}while(option!=99);
   return 0;
 }
