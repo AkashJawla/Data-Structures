@@ -133,10 +133,80 @@ void count_del(int data){
 }
 
 
+void swap(int n1,int n2){
+  Node *node2=head;
+  Node *node1=NULL,*prev1,*prev2;
+  if(n1!=n2){
+    while(node2){
+      if(node2->data==n1){
+        node1=node2;
+        break;
+      }
+      prev1=node2;
+      node2=node2->next;
+    }
+    node2=head;
+    while(node2){
+      if(node2->data==n2){
+        break;
+      }
+      prev2=node2;
+      node2=node2->next;
+    }
+  }
+  else{
+    cout<<"same elements!!";
+    return;
+  }
+  if(node1==NULL || node2==NULL){
+    cout<<"no match found";
+    return;
+  }
+  if((node1==head || node2==head) && (node1==prev2 || node2==prev1)){
+      if(node2==head){
+      node2=node1;
+      node1=head;
+    }
+    head=node2;
+    node1->next=node2->next;
+    node2->next=node1;
+    return;
+  }
+  if(node1==head || node2==head){
+    if(node2==head){
+      node2=node1;
+      node1=head;
+      prev2=prev1;
+    }
+    head=head->next;
+    prev2->next=node1;
+    node1->next=node2->next;
+    node2->next=head;
+    head=node2;
+    return;
+  }
+  if(node1==prev2 || node2==prev1){
+      if(node2==prev1){
+          node2=node1;
+          node1=node2;
+          prev1=prev2;
+      }
+      prev1->next=node2;
+      node1->next=node2->next;
+      node2->next=node1;
+      return;
+  }
+  prev1->next=node2;
+  prev2->next=node2->next;
+  node2->next=node1->next;
+  node1->next=prev2->next;
+  prev2->next=node1;
+}
+
 int main() {
         int data;
         int option;
-        int pos;
+        int pos,pos1,pos2;
         int *ctr_pos;
         do {
                 cout<<"\nWelcome to the LL\n";
@@ -144,7 +214,8 @@ int main() {
                 cout<<"1. Insert\n";
                 cout<<"2. Delete\n";
                 cout<<"3. Display\n";
-                cout<<"4. Exit\n";
+                cout<<"4. Swap\n";
+                cout<<"5. Exit\n";
 
 
                 cin>>option;
@@ -164,8 +235,8 @@ int main() {
                         cin>>option;
                         option+=3;
                 }
-                else if(option==3) option=8;
-                else if(option==4) option=99;
+                else if(option==3 || option==4) option+=5;
+                else if(option==5) option=99;
                 else option=999;
                 switch (option) {
                 case 1: insert_beg(data); break;
@@ -176,6 +247,7 @@ int main() {
                 case 6: cout<<"Enter position : "; cin>>pos; del_any(pos); break;
                 case 7: cout<<"Enter the data : "; cin>>data; count_del(data); break;
                 case 8: display(); break;
+                case 9: cout<<"Enter values needed to be swapped"<<endl; cout<<"1> "; cin>>pos1; cout<<"2> "; cin>>pos2; swap(pos1,pos2); break;
                 case 99: break;
                 default: cout<<"Wrong input. Enter again!!\n";
                 }
